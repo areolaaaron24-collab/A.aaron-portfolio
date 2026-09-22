@@ -1,10 +1,176 @@
 /*====================================
 
+        INTRO SEQUENCE
+
+====================================*/
+
+const introScreen =
+document.getElementById("intro-screen");
+
+const introTyping =
+document.getElementById("intro-typing");
+
+const introFinalText =
+document.querySelector(".intro-final-text");
+
+
+const introLines = [
+
+"I'M AARON AREOLA.",
+
+"A COMPUTER SCIENCE STUDENT.",
+
+"A STUDENT PROGRAMMER.",
+
+"A BUILDER.",
+
+"A LEARNER.",
+
+"AND THIS...",
+
+"IS MY PORTFOLIO."
+
+];
+
+
+let introIndex = 0;
+
+
+function startIntroSequence(){
+
+    if(
+        !introScreen ||
+        !introTyping ||
+        !introFinalText
+    ){
+
+        return;
+
+    }
+
+
+    introTyping.textContent = "";
+
+    introTyping.style.opacity = "0";
+
+    introTyping.style.transform =
+    "translateY(20px)";
+
+    introFinalText.style.opacity = "0";
+
+    introFinalText.style.transform =
+    "translate(-50%,calc(-50% + 20px))";
+
+
+    setTimeout(()=>{
+
+        introTyping.style.opacity = "1";
+
+        introTyping.style.transform =
+        "translateY(0)";
+
+        showNextIntroLine();
+
+    },700);
+
+}
+
+
+function showNextIntroLine(){
+
+    if(
+        introIndex >= introLines.length
+    ){
+
+        setTimeout(()=>{
+
+            introTyping.style.opacity = "0";
+
+            introTyping.style.transform =
+            "translateY(-20px)";
+
+
+            setTimeout(()=>{
+
+                introFinalText.style.opacity = "1";
+
+                introFinalText.style.transform =
+                "translate(-50%,-50%)";
+
+
+                setTimeout(()=>{
+
+                    introScreen.classList.add(
+                        "intro-hide"
+                    );
+
+
+                    setTimeout(()=>{
+
+                        introScreen.style.display =
+                        "none";
+
+                    },1000);
+
+                },1800);
+
+            },500);
+
+        },600);
+
+        return;
+
+    }
+
+
+    introTyping.style.opacity = "0";
+
+    introTyping.style.transform =
+    "translateY(20px)";
+
+
+    setTimeout(()=>{
+
+        introTyping.textContent =
+        introLines[introIndex];
+
+
+        introTyping.style.opacity = "1";
+
+        introTyping.style.transform =
+        "translateY(0)";
+
+
+        introIndex++;
+
+
+        setTimeout(()=>{
+
+            showNextIntroLine();
+
+        },1100);
+
+    },350);
+
+}
+
+
+if(introScreen){
+
+    startIntroSequence();
+
+}
+
+
+/*====================================
+
         TYPING EFFECT
 
 ====================================*/
 
-const typing = document.getElementById("typing");
+const typing =
+document.getElementById("typing");
+
 
 const words = [
 
@@ -22,59 +188,103 @@ const words = [
 
 ];
 
+
 let wordIndex = 0;
 
 let charIndex = 0;
 
 let deleting = false;
 
+
 function typeEffect(){
 
-const currentWord = words[wordIndex];
+    if(!typing){
 
-if(!deleting){
+        return;
 
-typing.textContent = currentWord.substring(0,charIndex);
+    }
 
-charIndex++;
 
-if(charIndex > currentWord.length){
+    const currentWord =
+    words[wordIndex];
 
-deleting = true;
 
-setTimeout(typeEffect,1500);
+    if(!deleting){
 
-return;
+        typing.textContent =
+        currentWord.substring(
+            0,
+            charIndex
+        );
+
+
+        charIndex++;
+
+
+        if(
+            charIndex >
+            currentWord.length
+        ){
+
+            deleting = true;
+
+
+            setTimeout(
+                typeEffect,
+                1500
+            );
+
+
+            return;
+
+        }
+
+    }else{
+
+        typing.textContent =
+        currentWord.substring(
+            0,
+            charIndex
+        );
+
+
+        charIndex--;
+
+
+        if(charIndex < 0){
+
+            deleting = false;
+
+            wordIndex++;
+
+
+            if(
+                wordIndex >=
+                words.length
+            ){
+
+                wordIndex = 0;
+
+            }
+
+        }
+
+    }
+
+
+    setTimeout(
+
+        typeEffect,
+
+        deleting ? 50 : 100
+
+    );
 
 }
 
-}else{
-
-typing.textContent = currentWord.substring(0,charIndex);
-
-charIndex--;
-
-if(charIndex < 0){
-
-deleting = false;
-
-wordIndex++;
-
-if(wordIndex >= words.length){
-
-wordIndex = 0;
-
-}
-
-}
-
-}
-
-setTimeout(typeEffect,deleting ? 50 : 100);
-
-}
 
 typeEffect();
+
 
 /*====================================
 
@@ -82,15 +292,29 @@ typeEffect();
 
 ====================================*/
 
-const menuBtn = document.querySelector(".menu-btn");
+const menuBtn =
+document.querySelector(".menu-btn");
 
-const navLinks = document.querySelector(".nav-links");
 
-menuBtn.onclick = () =>{
+const navLinks =
+document.querySelector(".nav-links");
 
-navLinks.classList.toggle("active");
+
+if(
+    menuBtn &&
+    navLinks
+){
+
+    menuBtn.onclick = ()=>{
+
+        navLinks.classList.toggle(
+            "active"
+        );
+
+    };
 
 }
+
 
 /*====================================
 
@@ -98,17 +322,28 @@ navLinks.classList.toggle("active");
 
 ====================================*/
 
-document.querySelectorAll(".nav-links a")
-
+document.querySelectorAll(
+    ".nav-links a"
+)
 .forEach(link=>{
 
-link.addEventListener("click",()=>{
+    link.addEventListener(
+        "click",
+        ()=>{
 
-navLinks.classList.remove("active");
+            if(navLinks){
+
+                navLinks.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
 
 });
 
-});
 
 /*====================================
 
@@ -116,70 +351,108 @@ navLinks.classList.remove("active");
 
 ====================================*/
 
-const topBtn = document.getElementById("topBtn");
+const topBtn =
+document.getElementById("topBtn");
 
-window.addEventListener("scroll",()=>{
 
-if(window.scrollY>500){
+if(topBtn){
 
-topBtn.style.display="block";
+    window.addEventListener(
+        "scroll",
+        ()=>{
 
-}else{
+            if(
+                window.scrollY > 500
+            ){
 
-topBtn.style.display="none";
+                topBtn.style.display =
+                "block";
+
+            }else{
+
+                topBtn.style.display =
+                "none";
+
+            }
+
+        }
+    );
+
+
+    topBtn.onclick = ()=>{
+
+        window.scrollTo({
+
+            top:0,
+
+            behavior:"smooth"
+
+        });
+
+    };
 
 }
 
-});
 
-topBtn.onclick=()=>{
-
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
-});
-
-}
 /*====================================
 
         SCROLL REVEAL
 
 ====================================*/
 
-const hiddenElements = document.querySelectorAll(
+const hiddenElements =
+document.querySelectorAll(
 
-".section, .project-card, .skill-box, .certificate-card, .timeline-item"
+    ".section, " +
+    ".project-card, " +
+    ".skill-box, " +
+    ".certificate-card, " +
+    ".timeline-item, " +
+    ".learning-card"
 
 );
 
-const observer = new IntersectionObserver((entries)=>{
 
-entries.forEach(entry=>{
+const observer =
+new IntersectionObserver(
 
-if(entry.isIntersecting){
+    (entries)=>{
 
-entry.target.classList.add("show");
+        entries.forEach(entry=>{
 
-}
+            if(
+                entry.isIntersecting
+            ){
 
-});
+                entry.target.classList.add(
+                    "show"
+                );
 
-},{
+            }
 
-threshold:.15
+        });
 
-});
+    },
+
+    {
+
+        threshold:.15
+
+    }
+
+);
+
 
 hiddenElements.forEach(el=>{
 
-el.classList.add("hidden");
+    el.classList.add(
+        "hidden"
+    );
 
-observer.observe(el);
+    observer.observe(el);
 
 });
+
 
 /*====================================
 
@@ -187,41 +460,69 @@ observer.observe(el);
 
 ====================================*/
 
-const sections=document.querySelectorAll("section");
+const sections =
+document.querySelectorAll(
+    "section"
+);
 
-const navItems=document.querySelectorAll(".nav-links a");
 
-window.addEventListener("scroll",()=>{
+const navItems =
+document.querySelectorAll(
+    ".nav-links a"
+);
 
-let current="";
 
-sections.forEach(section=>{
+window.addEventListener(
+    "scroll",
+    ()=>{
 
-const sectionTop=section.offsetTop-150;
+        let current = "";
 
-const sectionHeight=section.clientHeight;
 
-if(scrollY>=sectionTop){
+        sections.forEach(section=>{
 
-current=section.getAttribute("id");
+            const sectionTop =
+            section.offsetTop - 150;
 
-}
 
-});
+            if(
+                scrollY >= sectionTop
+            ){
 
-navItems.forEach(link=>{
+                current =
+                section.getAttribute(
+                    "id"
+                );
 
-link.classList.remove("active");
+            }
 
-if(link.getAttribute("href")==="#" + current){
+        });
 
-link.classList.add("active");
 
-}
+        navItems.forEach(link=>{
 
-});
+            link.classList.remove(
+                "active"
+            );
 
-});
+
+            if(
+                link.getAttribute("href")
+                ===
+                "#" + current
+            ){
+
+                link.classList.add(
+                    "active"
+                );
+
+            }
+
+        });
+
+    }
+);
+
 
 /*====================================
 
@@ -229,25 +530,45 @@ link.classList.add("active");
 
 ====================================*/
 
-const navbar=document.querySelector(".navbar");
+const navbar =
+document.querySelector(
+    ".navbar"
+);
 
-window.addEventListener("scroll",()=>{
 
-if(window.scrollY>50){
+if(navbar){
 
-navbar.style.background="rgba(5,11,22,.92)";
+    window.addEventListener(
+        "scroll",
+        ()=>{
 
-navbar.style.boxShadow="0 10px 30px rgba(0,0,0,.25)";
+            if(
+                window.scrollY > 50
+            ){
 
-}else{
+                navbar.style.background =
+                "rgba(5,11,22,.92)";
 
-navbar.style.background="rgba(0,0,0,.25)";
 
-navbar.style.boxShadow="none";
+                navbar.style.boxShadow =
+                "0 10px 30px rgba(0,0,0,.25)";
+
+            }else{
+
+                navbar.style.background =
+                "rgba(0,0,0,.25)";
+
+
+                navbar.style.boxShadow =
+                "none";
+
+            }
+
+        }
+    );
 
 }
 
-});
 
 /*====================================
 
@@ -255,49 +576,98 @@ navbar.style.boxShadow="none";
 
 ====================================*/
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+document.querySelectorAll(
+    'a[href^="#"]'
+)
+.forEach(anchor=>{
 
-anchor.addEventListener("click",function(e){
+    anchor.addEventListener(
+        "click",
+        function(e){
 
-e.preventDefault();
+            const href =
+            this.getAttribute(
+                "href"
+            );
 
-const target=document.querySelector(this.getAttribute("href"));
 
-if(target){
+            if(
+                !href ||
+                href === "#"
+            ){
 
-target.scrollIntoView({
+                return;
 
-behavior:"smooth"
+            }
+
+
+            const target =
+            document.querySelector(
+                href
+            );
+
+
+            if(target){
+
+                e.preventDefault();
+
+
+                target.scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            }
+
+        }
+    );
 
 });
 
-}
 
-});
-
-});
 /*====================================
 
         PARALLAX EFFECT
 
 ====================================*/
 
-const profileBox = document.querySelector(".profile-box");
+const profileBox =
+document.querySelector(
+    ".profile-box"
+);
 
-document.addEventListener("mousemove",(e)=>{
 
-const x = (window.innerWidth/2 - e.clientX)/35;
-const y = (window.innerHeight/2 - e.clientY)/35;
+document.addEventListener(
+    "mousemove",
+    (e)=>{
 
-if(profileBox){
+        const x =
+        (
+            window.innerWidth / 2
+            -
+            e.clientX
+        ) / 35;
 
-profileBox.style.transform =
 
-`rotateY(${-x}deg) rotateX(${y}deg)`;
+        const y =
+        (
+            window.innerHeight / 2
+            -
+            e.clientY
+        ) / 35;
 
-}
 
-});
+        if(profileBox){
+
+            profileBox.style.transform =
+            `rotateY(${-x}deg) rotateX(${y}deg)`;
+
+        }
+
+    }
+);
+
 
 /*====================================
 
@@ -305,24 +675,50 @@ profileBox.style.transform =
 
 ====================================*/
 
-const floatingCards = document.querySelectorAll(".floating-card");
+const floatingCards =
+document.querySelectorAll(
+    ".floating-card"
+);
 
-window.addEventListener("mousemove",(e)=>{
 
-const moveX = (e.clientX/window.innerWidth)*20;
-const moveY = (e.clientY/window.innerHeight)*20;
+window.addEventListener(
+    "mousemove",
+    (e)=>{
 
-floatingCards.forEach((card,index)=>{
+        const moveX =
+        (
+            e.clientX /
+            window.innerWidth
+        ) * 20;
 
-const speed=(index+1)*0.25;
 
-card.style.transform=
+        const moveY =
+        (
+            e.clientY /
+            window.innerHeight
+        ) * 20;
 
-`translate(${moveX*speed}px,${moveY*speed}px)`;
 
-});
+        floatingCards.forEach(
+            (card,index)=>{
 
-});
+                const speed =
+                (index + 1) * 0.25;
+
+
+                card.style.transform =
+
+                `translate(
+                    ${moveX * speed}px,
+                    ${moveY * speed}px
+                )`;
+
+            }
+        );
+
+    }
+);
+
 
 /*====================================
 
@@ -330,37 +726,65 @@ card.style.transform=
 
 ====================================*/
 
-const progressBars = document.querySelectorAll(".progress-bar");
+const progressBars =
+document.querySelectorAll(
+    ".progress-bar"
+);
 
-const skillObserver = new IntersectionObserver((entries)=>{
 
-entries.forEach(entry=>{
+const skillObserver =
+new IntersectionObserver(
 
-if(entry.isIntersecting){
+    (entries)=>{
 
-const width = entry.target.style.width;
+        entries.forEach(entry=>{
 
-entry.target.style.width="0";
+            if(
+                entry.isIntersecting
+            ){
 
-setTimeout(()=>{
+                const width =
+                getComputedStyle(
+                    entry.target
+                ).width;
 
-entry.target.style.transition="1.5s";
 
-entry.target.style.width=width;
+                entry.target.style.width =
+                "0";
 
-},150);
 
-}
+                setTimeout(()=>{
 
-});
+                    entry.target.style.transition =
+                    "1.5s";
 
-},{threshold:.5});
+
+                    entry.target.style.width =
+                    width;
+
+                },150);
+
+            }
+
+        });
+
+    },
+
+    {
+
+        threshold:.5
+
+    }
+
+);
+
 
 progressBars.forEach(bar=>{
 
-skillObserver.observe(bar);
+    skillObserver.observe(bar);
 
 });
+
 
 /*====================================
 
@@ -368,23 +792,37 @@ skillObserver.observe(bar);
 
 ====================================*/
 
-const projectCards = document.querySelectorAll(".project-card");
+const projectCards =
+document.querySelectorAll(
+    ".project-card"
+);
+
 
 projectCards.forEach(card=>{
 
-card.addEventListener("mouseenter",()=>{
+    card.addEventListener(
+        "mouseenter",
+        ()=>{
 
-card.style.transform="translateY(-15px) scale(1.02)";
+            card.style.transform =
+            "translateY(-15px) scale(1.02)";
+
+        }
+    );
+
+
+    card.addEventListener(
+        "mouseleave",
+        ()=>{
+
+            card.style.transform =
+            "translateY(0) scale(1)";
+
+        }
+    );
 
 });
 
-card.addEventListener("mouseleave",()=>{
-
-card.style.transform="translateY(0) scale(1)";
-
-});
-
-});
 
 /*====================================
 
@@ -392,60 +830,130 @@ card.style.transform="translateY(0) scale(1)";
 
 ====================================*/
 
-const buttons = document.querySelectorAll(
+const buttons =
+document.querySelectorAll(
 
-".btn,.btn-outline,.btn-download"
+    ".btn, " +
+    ".btn-outline, " +
+    ".btn-download"
 
 );
 
+
 buttons.forEach(button=>{
 
-button.addEventListener("click",(e)=>{
+    button.addEventListener(
+        "click",
+        (e)=>{
 
-const ripple=document.createElement("span");
+            const ripple =
+            document.createElement(
+                "span"
+            );
 
-const rect=button.getBoundingClientRect();
 
-const size=Math.max(rect.width,rect.height);
+            const rect =
+            button.getBoundingClientRect();
 
-ripple.style.width=size+"px";
-ripple.style.height=size+"px";
 
-ripple.style.left=(e.clientX-rect.left-size/2)+"px";
-ripple.style.top=(e.clientY-rect.top-size/2)+"px";
+            const size =
+            Math.max(
+                rect.width,
+                rect.height
+            );
 
-ripple.classList.add("ripple");
 
-button.appendChild(ripple);
+            ripple.style.width =
+            size + "px";
 
-setTimeout(()=>{
 
-ripple.remove();
+            ripple.style.height =
+            size + "px";
 
-},600);
+
+            ripple.style.left =
+
+            (
+                e.clientX
+                -
+                rect.left
+                -
+                size / 2
+            )
+            +
+            "px";
+
+
+            ripple.style.top =
+
+            (
+                e.clientY
+                -
+                rect.top
+                -
+                size / 2
+            )
+            +
+            "px";
+
+
+            ripple.classList.add(
+                "ripple"
+            );
+
+
+            button.appendChild(
+                ripple
+            );
+
+
+            setTimeout(()=>{
+
+                ripple.remove();
+
+            },600);
+
+        }
+    );
 
 });
 
-});
+
 /*====================================
 
         CURSOR GLOW
 
 ====================================*/
 
-const glow = document.createElement("div");
+const glow =
+document.createElement(
+    "div"
+);
 
-glow.className = "cursor-glow";
 
-document.body.appendChild(glow);
+glow.className =
+"cursor-glow";
 
-document.addEventListener("mousemove",(e)=>{
 
-glow.style.left = e.clientX + "px";
+document.body.appendChild(
+    glow
+);
 
-glow.style.top = e.clientY + "px";
 
-});
+document.addEventListener(
+    "mousemove",
+    (e)=>{
+
+        glow.style.left =
+        e.clientX + "px";
+
+
+        glow.style.top =
+        e.clientY + "px";
+
+    }
+);
+
 
 /*====================================
 
@@ -453,11 +961,17 @@ glow.style.top = e.clientY + "px";
 
 ====================================*/
 
-window.addEventListener("load",()=>{
+window.addEventListener(
+    "load",
+    ()=>{
 
-document.body.classList.add("loaded");
+        document.body.classList.add(
+            "loaded"
+        );
 
-});
+    }
+);
+
 
 /*====================================
 
@@ -467,36 +981,65 @@ document.body.classList.add("loaded");
 
 projectCards.forEach(card=>{
 
-card.addEventListener("mousemove",(e)=>{
+    card.addEventListener(
+        "mousemove",
+        (e)=>{
 
-const rect = card.getBoundingClientRect();
+            const rect =
+            card.getBoundingClientRect();
 
-const x = e.clientX - rect.left;
 
-const y = e.clientY - rect.top;
+            const x =
+            e.clientX -
+            rect.left;
 
-const rotateX = -(y - rect.height/2)/18;
 
-const rotateY = (x - rect.width/2)/18;
+            const y =
+            e.clientY -
+            rect.top;
 
-card.style.transform=
 
-`perspective(1000px)
- rotateX(${rotateX}deg)
- rotateY(${rotateY}deg)
- scale(1.04)`;
+            const rotateX =
+            -(
+                y -
+                rect.height / 2
+            ) / 18;
+
+
+            const rotateY =
+            (
+                x -
+                rect.width / 2
+            ) / 18;
+
+
+            card.style.transform =
+
+            `perspective(1000px)
+             rotateX(${rotateX}deg)
+             rotateY(${rotateY}deg)
+             scale(1.04)`;
+
+        }
+    );
+
+
+    card.addEventListener(
+        "mouseleave",
+        ()=>{
+
+            card.style.transform =
+
+            "perspective(1000px) " +
+            "rotateX(0deg) " +
+            "rotateY(0deg) " +
+            "scale(1)";
+
+        }
+    );
 
 });
 
-card.addEventListener("mouseleave",()=>{
-
-card.style.transform=
-
-"perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-
-});
-
-});
 
 /*====================================
 
@@ -504,53 +1047,511 @@ card.style.transform=
 
 ====================================*/
 
-const counters = document.querySelectorAll(".counter");
+const counters =
+document.querySelectorAll(
+    ".counter"
+);
 
-const counterObserver = new IntersectionObserver((entries)=>{
 
-entries.forEach(entry=>{
+const counterObserver =
+new IntersectionObserver(
 
-if(entry.isIntersecting){
+    (entries)=>{
 
-const counter = entry.target;
+        entries.forEach(entry=>{
 
-const target = +counter.dataset.target;
+            if(
+                entry.isIntersecting
+            ){
 
-let count = 0;
+                const counter =
+                entry.target;
 
-const speed = target/120;
 
-const update = ()=>{
+                const target =
+                +counter.dataset.target;
 
-count += speed;
 
-if(count < target){
+                let count = 0;
 
-counter.innerText = Math.floor(count);
 
-requestAnimationFrame(update);
+                const speed =
+                target / 120;
 
-}else{
 
-counter.innerText = target;
+                const update = ()=>{
 
-}
+                    count += speed;
 
-};
 
-update();
+                    if(
+                        count < target
+                    ){
 
-}
+                        counter.innerText =
+                        Math.floor(
+                            count
+                        );
 
-});
 
-},{threshold:.5});
+                        requestAnimationFrame(
+                            update
+                        );
+
+                    }else{
+
+                        counter.innerText =
+                        target;
+
+                    }
+
+                };
+
+
+                update();
+
+
+                counterObserver.unobserve(
+                    counter
+                );
+
+            }
+
+        });
+
+    },
+
+    {
+
+        threshold:.5
+
+    }
+
+);
+
 
 counters.forEach(counter=>{
 
-counterObserver.observe(counter);
+    counterObserver.observe(
+        counter
+    );
 
 });
+
+
+/*====================================
+
+        PROJECT MODAL
+
+====================================*/
+
+const projectModal =
+document.getElementById(
+    "project-modal"
+);
+
+
+const modalClose =
+document.getElementById(
+    "modal-close"
+);
+
+
+const modalOverlay =
+document.querySelector(
+    ".modal-overlay"
+);
+
+
+const modalImage =
+document.getElementById(
+    "modal-image"
+);
+
+
+const modalCategory =
+document.getElementById(
+    "modal-category"
+);
+
+
+const modalTitle =
+document.getElementById(
+    "modal-title"
+);
+
+
+const modalDescription =
+document.getElementById(
+    "modal-description"
+);
+
+
+const modalTech =
+document.getElementById(
+    "modal-tech"
+);
+
+
+const modalFeatures =
+document.getElementById(
+    "modal-features"
+);
+
+
+const modalGithub =
+document.getElementById(
+    "modal-github"
+);
+
+
+const projectData = {
+
+
+    "school-management": {
+
+        category:
+        "C# / .NET PROJECT",
+
+
+        title:
+        "School Management System",
+
+
+        image:
+        "assets/image/project1.png",
+
+
+        description:
+
+        "A school management console application " +
+        "built to practice student registration, " +
+        "searching, sorting, records management, " +
+        "and data handling.",
+
+
+        tech:[
+
+            "C#",
+
+            ".NET",
+
+            "Console",
+
+            "Database"
+
+        ],
+
+
+        features:[
+
+            "Student registration",
+
+            "Student searching",
+
+            "Sorting and organization",
+
+            "Record management",
+
+            "Data saving"
+
+        ],
+
+
+        github:
+        "https://github.com/areolaaaron24-collab"
+
+    },
+
+
+    "attendx": {
+
+        category:
+        "PYTHON PROJECT",
+
+
+        title:
+        "AttendX – Attendance System",
+
+
+        image:
+        "assets/image/project2.png",
+
+
+        description:
+
+        "A school attendance management system " +
+        "focused on student registration, teacher " +
+        "accounts, schedules, attendance tracking, " +
+        "and multiple attendance methods.",
+
+
+        tech:[
+
+            "Python",
+
+            "SQLite",
+
+            "CustomTkinter",
+
+            "QR",
+
+            "Face Recognition"
+
+        ],
+
+
+        features:[
+
+            "Student Registration",
+
+            "Teacher / TC Accounts",
+
+            "Class Schedules",
+
+            "Attendance Tracking",
+
+            "QR Attendance",
+
+            "Face Recognition",
+
+            "Fingerprint Support"
+
+        ],
+
+
+        github:
+        "https://github.com/areolaaaron24-collab"
+
+    },
+
+
+    "auto-calcu": {
+
+        category:
+        "C# / WINFORMS PROJECT",
+
+
+        title:
+        "Auto Calcu",
+
+
+        image:
+        "assets/image/project3.png",
+
+
+        description:
+
+        "A calculator application developed " +
+        "using C# and Windows Forms with a " +
+        "clean interface and support for " +
+        "common arithmetic operations.",
+
+
+        tech:[
+
+            "C#",
+
+            "WinForms"
+
+        ],
+
+
+        features:[
+
+            "Addition",
+
+            "Subtraction",
+
+            "Multiplication",
+
+            "Division",
+
+            "Clean user interface"
+
+        ],
+
+
+        github:
+        "https://github.com/areolaaaron24-collab"
+
+    }
+
+};
+
+
+document.querySelectorAll(
+    ".project-view-btn"
+)
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            const projectId =
+            button.getAttribute(
+                "data-project"
+            );
+
+
+            const project =
+            projectData[projectId];
+
+
+            if(
+                !project ||
+                !projectModal
+            ){
+
+                return;
+
+            }
+
+
+            modalCategory.textContent =
+            project.category;
+
+
+            modalTitle.textContent =
+            project.title;
+
+
+            modalDescription.textContent =
+            project.description;
+
+
+            modalImage.src =
+            project.image;
+
+
+            modalImage.alt =
+            project.title;
+
+
+            modalGithub.href =
+            project.github;
+
+
+            modalTech.innerHTML =
+            "";
+
+
+            project.tech.forEach(
+                tech=>{
+
+                    const tag =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                    tag.textContent =
+                    tech;
+
+
+                    modalTech.appendChild(
+                        tag
+                    );
+
+                }
+            );
+
+
+            modalFeatures.innerHTML =
+            "";
+
+
+            project.features.forEach(
+                feature=>{
+
+                    const li =
+                    document.createElement(
+                        "li"
+                    );
+
+
+                    li.textContent =
+                    feature;
+
+
+                    modalFeatures.appendChild(
+                        li
+                    );
+
+                }
+            );
+
+
+            projectModal.classList.add(
+                "active"
+            );
+
+
+            document.body.style.overflow =
+            "hidden";
+
+        }
+    );
+
+});
+
+
+function closeProjectModal(){
+
+    if(!projectModal){
+
+        return;
+
+    }
+
+
+    projectModal.classList.remove(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+    "";
+
+}
+
+
+if(modalClose){
+
+    modalClose.addEventListener(
+        "click",
+        closeProjectModal
+    );
+
+}
+
+
+if(modalOverlay){
+
+    modalOverlay.addEventListener(
+        "click",
+        closeProjectModal
+    );
+
+}
+
+
+document.addEventListener(
+    "keydown",
+    (e)=>{
+
+        if(
+            e.key === "Escape"
+        ){
+
+            closeProjectModal();
+
+        }
+
+    }
+);
+
 
 /*====================================
 
@@ -558,15 +1559,42 @@ counterObserver.observe(counter);
 
 ====================================*/
 
-document.querySelectorAll("img").forEach(img=>{
+document.querySelectorAll(
+    "img"
+)
+.forEach(img=>{
 
-img.onload=()=>{
 
-img.style.opacity="1";
+    img.setAttribute(
+        "draggable",
+        "false"
+    );
 
-};
+
+    const showImage = ()=>{
+
+        img.style.opacity =
+        "1";
+
+    };
+
+
+    img.addEventListener(
+        "load",
+        showImage
+    );
+
+
+    if(
+        img.complete
+    ){
+
+        showImage();
+
+    }
 
 });
+
 
 /*====================================
 
@@ -574,20 +1602,34 @@ img.style.opacity="1";
 
 ====================================*/
 
-console.log("%cAaron Areola Portfolio",
+console.log(
+    "%cAaron Areola Portfolio",
 
-"color:#3b82f6;font-size:22px;font-weight:bold;");
+    "color:#3b82f6;" +
+    "font-size:22px;" +
+    "font-weight:bold;"
+);
 
-console.log("%cDesigned with HTML, CSS & JavaScript",
 
-"color:#06b6d4;font-size:14px;");
+console.log(
+    "%cDesigned with HTML, CSS & JavaScript",
+
+    "color:#06b6d4;" +
+    "font-size:14px;"
+);
+
+
 /*====================================
 
         RIPPLE STYLE
 
 ====================================*/
 
-const rippleStyle = document.createElement("style");
+const rippleStyle =
+document.createElement(
+    "style"
+);
+
 
 rippleStyle.innerHTML = `
 
@@ -596,6 +1638,7 @@ rippleStyle.innerHTML = `
 .btn-download{
 
 position:relative;
+
 overflow:hidden;
 
 }
@@ -606,11 +1649,13 @@ position:absolute;
 
 border-radius:50%;
 
-background:rgba(255,255,255,.45);
+background:
+rgba(255,255,255,.45);
 
 transform:scale(0);
 
-animation:ripple .6s linear;
+animation:
+ripple .6s linear;
 
 pointer-events:none;
 
@@ -628,8 +1673,6 @@ opacity:0;
 
 }
 
-/* Cursor Glow */
-
 .cursor-glow{
 
 position:fixed;
@@ -640,13 +1683,16 @@ height:25px;
 
 border-radius:50%;
 
-background:rgba(59,130,246,.35);
+background:
+rgba(59,130,246,.35);
 
 pointer-events:none;
 
-transform:translate(-50%,-50%);
+transform:
+translate(-50%,-50%);
 
-backdrop-filter:blur(4px);
+backdrop-filter:
+blur(4px);
 
 transition:
 
@@ -658,19 +1704,24 @@ z-index:99999;
 
 }
 
-/* Image Fade */
+#intro-typing,
+.intro-final-text{
 
-img{
+transition:
 
-opacity:0;
+opacity .5s ease,
 
-transition:opacity .8s ease;
+transform .5s ease;
 
 }
 
 `;
 
-document.head.appendChild(rippleStyle);
+
+document.head.appendChild(
+    rippleStyle
+);
+
 
 /*====================================
 
@@ -678,11 +1729,18 @@ document.head.appendChild(rippleStyle);
 
 ====================================*/
 
-document.querySelectorAll("img").forEach(img=>{
+document.querySelectorAll(
+    "img"
+)
+.forEach(img=>{
 
-img.setAttribute("draggable","false");
+    img.setAttribute(
+        "draggable",
+        "false"
+    );
 
 });
+
 
 /*====================================
 
@@ -695,13 +1753,17 @@ img.setAttribute("draggable","false");
 
 /*
 
-document.addEventListener("contextmenu",(e)=>{
+document.addEventListener(
+    "contextmenu",
+    (e)=>{
 
-e.preventDefault();
+        e.preventDefault();
 
-});
+    }
+);
 
 */
+
 
 /*====================================
 
@@ -714,31 +1776,38 @@ e.preventDefault();
 
 /*
 
-document.addEventListener("keydown",(e)=>{
+document.addEventListener(
+    "keydown",
+    (e)=>{
 
-if(e.key==="F12"){
+        if(
+            e.key === "F12"
+        ){
 
-e.preventDefault();
+            e.preventDefault();
 
-}
+        }
 
-if(
 
-e.ctrlKey &&
+        if(
 
-e.shiftKey &&
+            e.ctrlKey &&
 
-e.key==="I"
+            e.shiftKey &&
 
-){
+            e.key === "I"
 
-e.preventDefault();
+        ){
 
-}
+            e.preventDefault();
 
-});
+        }
+
+    }
+);
 
 */
+
 
 /*====================================
 
@@ -746,16 +1815,21 @@ e.preventDefault();
 
 ====================================*/
 
-const yearText=document.querySelector(".copyright");
+const yearText =
+document.querySelector(
+    ".copyright"
+);
+
 
 if(yearText){
 
-yearText.innerHTML=
+    yearText.innerHTML =
 
-`© ${new Date().getFullYear()} Aaron Areola.
-All Rights Reserved.`;
+    `© ${new Date().getFullYear()} Aaron Areola.
+    All Rights Reserved.`;
 
 }
+
 
 /*====================================
 
@@ -763,21 +1837,27 @@ All Rights Reserved.`;
 
 ====================================*/
 
-window.addEventListener("load",()=>{
+window.addEventListener(
+    "load",
+    ()=>{
 
-console.clear();
+        console.log(
 
-console.log("%c✔ Portfolio Loaded Successfully",
+            "%c✔ Portfolio Loaded Successfully",
 
-"color:#22c55e;font-size:18px;font-weight:bold;");
+            "color:#22c55e;" +
+            "font-size:18px;" +
+            "font-weight:bold;"
 
-});
+        );
+
+    }
+);
+
 
 /*====================================
 
         END OF SCRIPT.JS
-
-        Version 2.0
 
         Aaron Areola Portfolio
 
